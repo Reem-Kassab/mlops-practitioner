@@ -66,5 +66,5 @@ if __name__ == "__main__":
     logger.info(" Starting ONNX Export...")
     export_to_onnx(settings.model_save_path, ONNX_PATH)
     
-    logger.info("\n Running Parity Test...")
+    print("\n Running Parity Test...")
     test_parity(settings.model_save_path, ONNX_PATH)
