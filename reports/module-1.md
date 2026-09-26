@@ -26,3 +26,7 @@ By implementing a multi-stage Docker build, we successfully stripped out build t
 
 **Chosen Format for this Service: ONNX**
 We transitioned from Pickle to ONNX primarily for security and interoperability. Pickle is inherently insecure—loading a compromised `.pkl` file can execute arbitrary malicious code. ONNX eliminates this fatal security flaw, enforces a strict schema, and allows our model to be served in cross-language environments (e.g., C++ or Rust backends) in the future.
+
+## 5. Maturity Self-Assessment
+- **Current Level:** Level 1 (Containerized API).
+- **Missing Capability for Next Level:** We lack automated Continuous Integration / Continuous Deployment (CI/CD) pipelines. To reach Level 2 (Repeatable), we must implement automated testing and linting on every commit via GitHub Actions, and deploy our container to a managed cloud service.

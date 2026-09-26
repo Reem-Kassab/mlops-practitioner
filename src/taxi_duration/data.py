@@ -1,5 +1,6 @@
 import pandas as pd
 
+
 def load_and_clean_data(file_path: str) -> pd.DataFrame:
     """
     Loads raw NYC taxi parquet data, calculates duration, 

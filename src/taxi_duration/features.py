@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder
 
+
 def build_features(df: pd.DataFrame) -> pd.DataFrame:
     """
     Applies deterministic feature engineering 

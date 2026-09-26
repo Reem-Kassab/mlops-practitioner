@@ -1,16 +1,18 @@
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, HTTPException
-import pandas as pd
-from taxi_duration.api.schemas import (
-    TripInput, 
-    PredictionOutput, 
-    BatchTripInput, 
-    BatchPredictionOutput, 
-    HealthResponse
-)
 
-from taxi_duration.predict import TaxiDurationPredictor
+import pandas as pd
+from fastapi import FastAPI, HTTPException
+
+from taxi_duration.api.schemas import (
+    BatchPredictionOutput,
+    BatchTripInput,
+    HealthResponse,
+    PredictionOutput,
+    TripInput,
+)
 from taxi_duration.logging_conf import setup_logging
+from taxi_duration.predict import TaxiDurationPredictor
+
 logger = setup_logging("taxi_duration_api")
 
 predictor = TaxiDurationPredictor()
@@ -24,7 +26,7 @@ async def lifespan(app: FastAPI):
     try:
         predictor.load()
         logger.info("Model loaded successfully into memory.")
-    except Exception as e:
+    except (RuntimeError, OSError) as e:
         logger.error(f" Failed to load model: {e}")
     
     yield 
@@ -66,7 +68,7 @@ def predict(trip: TripInput):
     try:
         pred = predictor.predict_one(trip.model_dump())
         return PredictionOutput(duration_minutes=pred)
-    except Exception as e:
+    except (ValueError, TypeError, KeyError) as e:
         logger.error(f"Prediction error: {e}")
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -86,6 +88,6 @@ def predict_batch(batch: BatchTripInput):
         preds = predictor.predict_batch(df)
         
         return BatchPredictionOutput(predictions=preds.tolist())
-    except Exception as e:
+    except (ValueError, TypeError, KeyError) as e:
         logger.error(f"Batch prediction error: {e}")
         raise HTTPException(status_code=400, detail=str(e))

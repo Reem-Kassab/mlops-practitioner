@@ -2,6 +2,8 @@ import time
 import joblib
 import pandas as pd
 from taxi_duration.api.main import predictor
+import logging
+logger = logging.getLogger(__name__)
 
 pkl_model = joblib.load("models/baseline_linear_pipeline.pkl")
 dummy_df_pkl = pd.DataFrame([{"trip_distance": 2.5, "PU_DO": "236_239"}])
@@ -19,6 +21,6 @@ for _ in range(100):
     predictor.predict_batch(dummy_payload_df)
 onnx_time = (time.perf_counter() - start) / 100
 
-print(f"Pickle Latency: {pkl_time * 1000:.4f} ms")
-print(f"ONNX Latency:   {onnx_time * 1000:.4f} ms")
-print(f"ONNX is {pkl_time / onnx_time:.2f}x faster!")
+logger.info(f"Pickle Latency: {pkl_time * 1000:.4f} ms")
+logger.info(f"ONNX Latency:   {onnx_time * 1000:.4f} ms")
+logger.info(f"ONNX is {pkl_time / onnx_time:.2f}x faster!")

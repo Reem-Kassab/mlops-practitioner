@@ -1,9 +1,10 @@
+from typing import Any
 import joblib
-import pandas as pd
-from typing import Dict, Any
 import numpy as np
-
+import pandas as pd
 from taxi_duration.config import settings
+import logging
+logger = logging.getLogger(__name__)
 
 class TaxiDurationPredictor:
     def __init__(self):
@@ -25,7 +26,7 @@ class TaxiDurationPredictor:
             
         return self.model.predict(data)
 
-    def predict_one(self, trip_data: Dict[str, Any]) -> float:
+    def predict_one(self, trip_data: dict[str, Any]) -> float:
         """Makes a prediction for a single trip."""
         df = pd.DataFrame([trip_data])
         prediction = self.predict_batch(df)
@@ -35,4 +36,4 @@ if __name__ == "__main__":
     predictor = TaxiDurationPredictor().load()
     sample_trip = {"PULocationID": 10, "DOLocationID": 50, "trip_distance": 3.5}
     pred = predictor.predict_one(sample_trip)
-    print(f"Prediction: {pred:.2f} minutes")
+    logger.info(f"Prediction: {pred:.2f} minutes")

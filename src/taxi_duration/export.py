@@ -1,10 +1,13 @@
 import joblib
-import onnxruntime as rt
 import numpy as np
+import onnxruntime as rt
 import pandas as pd
 from skl2onnx import convert_sklearn
-from skl2onnx.common.data_types import StringTensorType, FloatTensorType
+from skl2onnx.common.data_types import FloatTensorType, StringTensorType
 from taxi_duration.config import settings
+import logging
+logger = logging.getLogger(__name__)
+
 
 def export_to_onnx(pkl_model_path: str, onnx_model_path: str):
     """
@@ -28,7 +31,7 @@ def export_to_onnx(pkl_model_path: str, onnx_model_path: str):
     with open(onnx_model_path, "wb") as f:
         f.write(onnx_model.SerializeToString())
         
-    print(f" ONNX model saved to: {onnx_model_path}")
+    logger.info(f" ONNX model saved to: {onnx_model_path}")
 
 
 def test_parity(pkl_model_path: str, onnx_model_path: str):
@@ -50,18 +53,18 @@ def test_parity(pkl_model_path: str, onnx_model_path: str):
     }
     onnx_preds = sess.run(None, onnx_inputs)[0].flatten()
     
-    print("\n--- Parity Test ---")
-    print(f"Sklearn Predictions: {sklearn_preds}")
-    print(f"ONNX Predictions:    {onnx_preds}")
+    logger.info("\n--- Parity Test ---")
+    logger.info(f"Sklearn Predictions: {sklearn_preds}")
+    logger.info(f"ONNX Predictions:    {onnx_preds}")
     np.testing.assert_allclose(sklearn_preds, onnx_preds, rtol=1e-4, atol=1e-4)
-    print("Parity Test Passed! Both models produce the exact same predictions.")
+    logger.info("Parity Test Passed! Both models produce the exact same predictions.")
 
 
 if __name__ == "__main__":
     ONNX_PATH = settings.model_save_path.replace(".pkl", ".onnx")
     
-    print(" Starting ONNX Export...")
+    logger.info(" Starting ONNX Export...")
     export_to_onnx(settings.model_save_path, ONNX_PATH)
     
-    print("\n Running Parity Test...")
+    logger.info("\n Running Parity Test...")
     test_parity(settings.model_save_path, ONNX_PATH)

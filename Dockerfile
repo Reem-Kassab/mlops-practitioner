@@ -16,5 +16,8 @@ COPY models /app/models
 
 ENV PATH="/app/.venv/bin:$PATH"
 ENV PYTHONPATH="/app/src"
+# Create a non-root user and switch to it for security
+RUN useradd -m appuser && chown -R appuser /app
+USER appuser
 EXPOSE 8000
 CMD ["uvicorn", "taxi_duration.api.main:app", "--host", "0.0.0.0", "--port", "8000"]

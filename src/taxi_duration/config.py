@@ -1,7 +1,7 @@
-from pydantic_settings import BaseSettings
-from pydantic import Field
 from pathlib import Path
 
+from pydantic import Field
+from pydantic_settings import BaseSettings
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 

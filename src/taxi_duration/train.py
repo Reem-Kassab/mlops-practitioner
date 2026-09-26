@@ -1,11 +1,12 @@
 import joblib
+from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
-from sklearn.linear_model import LinearRegression
+
 from taxi_duration.config import settings
-from taxi_duration.logging_conf import setup_logging
-from taxi_duration.data import load_and_clean_data 
+from taxi_duration.data import load_and_clean_data
 from taxi_duration.features import build_features, get_preprocessor
+from taxi_duration.logging_conf import setup_logging
 
 logger = setup_logging("taxi_duration_train")
 

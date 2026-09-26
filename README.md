@@ -38,17 +38,12 @@ curl -X POST "[http://127.0.0.1:8000/predict](http://127.0.0.1:8000/predict)" \
 Send a POST request with an array of trips.
 
 ```Bash
-curl -X POST "[http://127.0.0.1:8000/predict/batch](http://127.0.0.1:8000/predict/batch)" \
+curl -X POST "http://127.0.0.1:8000/predict" \
      -H "Content-Type: application/json" \
-     -d '{
-           "trips": [
-             {"PULocationID": 236, "DOLocationID": 239, "trip_distance": 2.5},
-             {"PULocationID": 10, "DOLocationID": 50, "trip_distance": 0.8}
-           ]
-         }'
+     -d '{"PULocationID": 236, "DOLocationID": 239, "trip_distance": 2.5}'
 ```
 ## What does the repository contain?
-```
+```text
 .
 ├── Dockerfile                      # Multi-stage Docker build configuration
 ├── pyproject.toml                  # Python package and dependency declarations

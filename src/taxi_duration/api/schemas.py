@@ -1,5 +1,6 @@
+
 from pydantic import BaseModel, Field
-from typing import List
+
 
 # 1. the data that the user should send
 class TripInput(BaseModel):
@@ -13,11 +14,11 @@ class PredictionOutput(BaseModel):
 
 # 3. the result for one batch
 class BatchTripInput(BaseModel):
-    trips: List[TripInput]
+    trips: list[TripInput]
 
 # 4. the result for group of batchs
 class BatchPredictionOutput(BaseModel):
-    predictions: List[float]
+    predictions: list[float]
 
 # 5. healthy check response
 class HealthResponse(BaseModel):
