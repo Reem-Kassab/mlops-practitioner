@@ -1,2 +1,0 @@
-data_path: "data/green_tripdata_2026-01.parquet"
-model_save_path: "models/baseline_linear_pipeline.pkl"
