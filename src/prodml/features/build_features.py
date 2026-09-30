@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import ColumnTransformer
 
-def build_feature(pu:pd.Series,do:pd.Series)->pd.Series:
+def build_feature(pu:pd.Series|int,do:pd.Series|int)->pd.Series:
     """This function ctreate the main feature"""
     PU_DO = pu.astype(str) + "_" + do.astype(str)
     return PU_DO

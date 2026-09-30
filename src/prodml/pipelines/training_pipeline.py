@@ -4,6 +4,7 @@ from prodml.data.validation import validate_distance,validate_no_infinite_values
 from prodml.features.build_features import build_feature,get_preprocessor
 from prodml.models.train import train_model,save_model
 from prodml.utils.io import get_raw_data_path,get_model_artifact_path
+from prodml.models.evaluate import evaluate_model
 
 def run_training():
     #getting the paths
@@ -30,6 +31,11 @@ def run_training():
     #building and train the model
     processor=get_preprocessor()
     model=train_model(x_train,y_train,processor)
+    #model evaluation
+    mae, rmse = evaluate_model(model,x_test, y_test)
+
+    print(f"MAE: {mae:.4f}")
+    print(f"RMSE: {rmse:.4f}")
     #save the model
     save_model(model,model_path)
 
