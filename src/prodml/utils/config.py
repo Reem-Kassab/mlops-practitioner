@@ -32,7 +32,7 @@ class FeaturesConfig(BaseModel):
 
 class TrainingConfig(BaseModel):
     test_size: float
-    random_state: 42
+    random_state: int
 
 class ApiConfig(BaseModel):
     host: str
