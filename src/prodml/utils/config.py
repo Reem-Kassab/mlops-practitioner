@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from typing import Any
 
@@ -6,7 +7,12 @@ from pydantic import BaseModel
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[3]
+PROJECT_ROOT = Path(
+    os.getenv(
+        "PRODML_PROJECT_ROOT",
+        Path.cwd(),
+    )
+)
 CONFIG_FILE = PROJECT_ROOT / "configs" / "config.yaml"
 
 
