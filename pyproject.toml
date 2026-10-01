@@ -1,0 +1,43 @@
+[project]
+name = "taxi-duration-predictor"
+version = "0.1.0"
+description = "ML system for predicting taxi trip duration from trip characteristics"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.141.1",
+    "ipykernel>=7.3.0",
+    "matplotlib>=3.10.9",
+    "onnxruntime>=1.24.3",
+    "pandas>=2.3.3",
+    "pyarrow>=25.0.1",
+    "pydantic>=2.13.5",
+    "pydantic-settings>=2.15.0",
+    "pyyaml>=6.0.3",
+    "scikit-learn>=1.7.2",
+    "skl2onnx>=1.20.0",
+    "uvicorn>=0.53.0",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[dependency-groups]
+dev = [
+    "black>=26.5.1",
+    "httpx>=0.28.1",
+    "mypy>=2.3.1",
+    "pre-commit>=4.6.2",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.16.7",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = [
+    "--cov=src/prodml",
+    "--cov-report=term-missing",
+    "--cov-fail-under=70",
+]
