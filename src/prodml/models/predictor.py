@@ -1,43 +1,66 @@
+from typing import Any
+
+import pandas as pd
+
 from prodml.features.build_features import build_feature
-from prodml.models.sklearn_model import SklearnModel
+from prodml.models.base import ModelBase
+import logging
 
-class DurationPredictor():
-    def __init__(self, model: SklearnModel):
-        self.model=model
+logger = logging.getLogger(__name__)
 
-    def load(self)->None:
-        """Delegates loading to the underlying model."""
+class DurationPredictor:
+    def __init__(self, model: ModelBase):
+        self.model = model
+
+    def load(self) -> None:
+        """Delegate loading to the underlying model."""
         self.model.load()
 
-    def predict_one(self,feature:dict[str:any])->float:
-        PU=feature["PULocationID"]
-        DO=feature["DOLocationID"]
-        distance=feature["trip_distance"]
+    def predict_one(self, feature: dict[str, Any]) -> float:
+        """Generate one taxi-duration prediction."""
+        pu = feature["PULocationID"]
+        do = feature["DOLocationID"]
+        distance = feature["trip_distance"]
 
-        pu_do=build_feature(PU,DO)
+        pu_do = build_feature(
+            pd.Series([pu]),
+            pd.Series([do]),
+        ).iloc[0]
 
-        df={
-            "PU_DO":pu_do,
-            "trip_distance":distance
+        model_features = {
+            "PU_DO": pu_do,
+            "trip_distance": distance,
         }
+        logger.debug(
+            "Prepared feature vector: %s",
+            model_features,
+        )
+        return self.model.predict_one(model_features)
 
-        return self.model.predict_one(df)
+    def predict_batch(
+        self,
+        features: list[dict[str, Any]],
+    ) -> list[float]:
+        """Generate predictions for multiple taxi trips."""
+        pu = pd.Series(
+            [feature["PULocationID"] for feature in features]
+        )
+        do = pd.Series(
+            [feature["DOLocationID"] for feature in features]
+        )
 
-    def predict_batch(self,features:list[dict[str:any]])->list[float]:
-        model_features = []
+        pu_do = build_feature(pu, do)
 
-        for feature in features:
-            pu = feature["PULocationID"]
-            do = feature["DOLocationID"]
-            distance = feature["trip_distance"]
+        model_features = [
+            {
+                "PU_DO": pu_do.iloc[index],
+                "trip_distance": features[index]["trip_distance"],
+            }
+            for index in range(len(features))
+        ]
 
-            pu_do = build_feature(pu, do)
-
-            model_features.append(
-                {
-                    "PU_DO": pu_do,
-                    "trip_distance": distance,
-                }
-            )
-
+        logger.debug(
+            "Prepared feature vector: %s",
+            model_features,
+        )
         return self.model.predict_batch(model_features)

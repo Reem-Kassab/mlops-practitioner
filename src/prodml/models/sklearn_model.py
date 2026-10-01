@@ -3,6 +3,9 @@ from typing import Any
 import joblib
 import pandas as pd
 from prodml.models.base import ModelBase
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class SklearnModel(ModelBase):
@@ -14,7 +17,15 @@ class SklearnModel(ModelBase):
 
     def load(self) -> None:
         """Load the trained sklearn pipeline from disk."""
-        self.model=joblib.load(self.artifact_path)
+        try:
+            self.model = joblib.load(self.artifact_path)
+            logger.info("Model loaded successfully")
+        except Exception:
+            logger.error(
+                "Model loading failed",
+                exc_info=True,
+            )
+            raise
 
     def predict_one(self, features: dict[str, Any]) -> float:
         """Generate a prediction for one observation."""

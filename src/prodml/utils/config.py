@@ -18,11 +18,13 @@ class ProjectConfig(BaseModel):
 class DataConfig(BaseModel):
     raw_path: str
     processed_path: str
+    validation_sample_name: str
 
 
 class ModelConfig(BaseModel):
     artifact_dir: str
     artifact_name: str
+    onnx_artifact_name: str
 
 
 class FeaturesConfig(BaseModel):
@@ -52,6 +54,7 @@ class Settings(BaseSettings):
         env_nested_delimiter="__",
         extra="ignore",
     )
+
 
 
 def load_settings() -> Settings:
