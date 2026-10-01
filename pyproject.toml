@@ -33,3 +33,11 @@ dev = [
     "pytest-cov>=7.1.0",
     "ruff>=0.16.7",
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = [
+    "--cov=src/prodml",
+    "--cov-report=term-missing",
+    "--cov-fail-under=70",
+]
